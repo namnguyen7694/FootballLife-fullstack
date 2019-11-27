@@ -1,0 +1,25 @@
+.jumbotron.text-center.header {
+    background-image: url('./VN.jpg');
+    color: snow;
+    height: 350px;
+    background-size: cover;
+    position: relative;
+}
+.jumbotron.text-center.header::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    top: 0; bottom: 0;
+    background-color: rgba(255, 0, 118, 0.27);
+    height: 350px;
+    background-size: cover;
+}
+
+ul.nav.nav-tabs {
+    background-color: #162134 !important;
+    font-size: 30px;
+}
+
+.nav-pills .nav-link, .nav-tabs .nav-link {
+    font-size: 1rem;
+}
