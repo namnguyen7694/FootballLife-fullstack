@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { list } from "./apiPost";
 import DefaultPost from "../images/mountains.jpg";
 import { Link } from "react-router-dom";
+import Skeleton from 'react-loading-skeleton';
 
 class Posts extends Component {
     constructor() {
@@ -50,7 +51,7 @@ class Posts extends Component {
                     return (
                         <div className="card col-md-4" key={i}>
                             <div className="card-body">
-                                <img
+                                <img    
                                     src={`${
                                         process.env.REACT_APP_API_URL
                                     }/post/photo/${post._id}`}
@@ -92,11 +93,10 @@ class Posts extends Component {
         return (
             <div className="container">
                 <h2 className="mt-5 mb-5">
-                    {!posts.length ? "No more posts!" : "Recent Posts"}
+                    {!posts.length ? "Loading Posts..." : "Recent Posts"}
                 </h2>
-
-                {this.renderPosts(posts)}
-
+                {!posts.length ? <Skeleton height={500}/> : this.renderPosts(posts)}
+                 
                 {page > 1 ? (
                     <button
                         className="btn btn-raised btn-warning mr-5 mt-5 mb-5"

@@ -18,7 +18,7 @@ class EditPost extends Component {
             loading: false
         };
     }
-    //Goi API laay gia tri ban dau khi component did mount
+    //Goi API lay gia tri ban dau khi component did mount
     init = postId => {
         singlePost(postId).then(data => {
             if (data.error) {
