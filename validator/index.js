@@ -26,11 +26,11 @@ exports.userSignupValidator = async (req, res, next) =>{
     }
 
     //confirm password
-    if (!password2) {
-        errors.password2 = "Confirm password is required"
-    } else if(!validator.equals(password,password2)) {
-        errors.password2 = "Password doesn't match"
-    }
+    // if (!password2) {
+    //     errors.password2 = "Confirm password is required"
+    // } else if(!validator.equals(password,password2)) {
+    //     errors.password2 = "Password doesn't match"
+    // }
 
     //fullName
     if (!name) {

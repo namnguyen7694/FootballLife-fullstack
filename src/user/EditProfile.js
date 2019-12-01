@@ -211,12 +211,8 @@ class EditProfile extends Component {
           onError={i => (i.target.src = `${DefaultProfile}`)}
           alt={name}
         />
-
-        {isAuthenticated().user.role === "admin" &&
-          this.signupForm(name, email, password, about)}
-
-        {isAuthenticated().user._id === id &&
-          this.signupForm(name, email, password, about)}
+        {(isAuthenticated().user.role === "admin" || isAuthenticated().user._id === id) ? 
+          this.signupForm(name, email, password, about) : "" }
       </div>
     );
   }
