@@ -13,8 +13,8 @@ dotenv.config();
 const path = require('path');
 const publicPath = path.join(__dirname, 'build');
 app.use(express.static(publicPath));
-const mongoUri = process.env.MONGO_LOCAL_URI;
-// const mongoUri = process.env.MONGO_STAGING_URI;
+// const mongoUri = process.env.MONGO_LOCAL_URI;
+const mongoUri = process.env.MONGO_STAGING_URI;
 
 mongoose.connect(mongoUri, {
     useNewUrlParser: true,
