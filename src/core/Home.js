@@ -1,6 +1,5 @@
 import React from "react";
 import Posts from "../post/Posts";
-
 const Home = () => (
   <div>
     <div className="jumbotron text-center header">
@@ -8,7 +7,7 @@ const Home = () => (
       <h3 className="lead">Welcome to Social of Football</h3>
     </div>
     <div className="container">
-      <Posts />
+      <Posts /> 
     </div>
     <div className="jumbotron text-center">
       <h3>Copyright 2019</h3>

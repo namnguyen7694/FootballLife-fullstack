@@ -12,6 +12,11 @@ const { OAuth2Client } = require('google-auth-library');
 const { sendEmail } = require('../helpers');
 
 exports.signup = async (req, res) => {
+    const userExists = await User.findOne({ email: req.body.email });
+    if (userExists)
+        return res.status(403).json({
+            error: 'Email is taken!'
+        });
     const user = await new User(req.body);
     await user.save();
     res.status(200).json({ message: 'Signup success! Please login.' , user});
@@ -42,8 +47,8 @@ exports.signin = (req, res) => {
             return res.status(200).json({ token, user: { _id, email, name, role } })
         })
         .catch(err =>{
-            if(!err.status) return res.status(500).json({message:err.message})
-            return res.status(err.status).json({message:err.message})
+            if(!err.status) return res.status(500).json({error:err.message})
+            return res.status(err.status).json({error:err.message})
         })    
 }
 

@@ -83,7 +83,7 @@ class Comment extends Component {
 
         return (
             <div>
-                <h2 className="mt-5 mb-5">Leave a comment</h2>
+                <h2 className="mt-2 mb-2">Leave a comment</h2>
 
                 <form onSubmit={this.addComment}>
                     <div className="form-group">

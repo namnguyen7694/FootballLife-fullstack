@@ -17,12 +17,10 @@ const {
 } = require('../controllers/post');
 const { requireSignin } = require('../controllers/auth');
 const { userById } = require('../controllers/user');
-const { createPostValidator } = require('../validator');
 
 const router = express.Router();
-
 // post routes
-router.post('/post/new/:userId', requireSignin, createPost, createPostValidator);
+router.post('/post/new/:userId', requireSignin, createPost);
 router.get('/posts', getPosts);
 router.get('/posts/by/:userId',requireSignin, postsByUser);
 router.get('/post/:postId', singlePost);

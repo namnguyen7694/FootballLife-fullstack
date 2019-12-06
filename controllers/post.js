@@ -6,7 +6,6 @@ const _ = require('lodash');
 exports.postById = (req, res, next, id) => {
     Post.findById(id)
         .populate('comments.postedBy', '_id name')
-        .populate('likes', '_id name')
         .populate('postedBy', '_id name role')
         .select('_id title body created postedBy likes comments photo')
         .exec((err, post) => {
@@ -23,7 +22,7 @@ exports.postById = (req, res, next, id) => {
 
 exports.createPost = (req, res, next) => {
     let form = new formidable.IncomingForm();
-    form.keepExtensions = true;
+    form.keepExtensions = false;
     form.parse(req, (err, fields, files) => {
         if (err) {
             return res.status(400).json({
@@ -50,14 +49,11 @@ exports.createPost = (req, res, next) => {
 
 // get all Post with pagination
 exports.getPosts = async (req, res) => {
-    // get current page from req.query or use default value of 1
     const currentPage = req.query.page || 1;
-    // return 5 posts per page
     const perPage = 6;
     let totalItems;
 
     const posts = await Post.find()
-        // countDocuments() gives you total count of posts
         .countDocuments()
         .then(count => {
             totalItems = count;

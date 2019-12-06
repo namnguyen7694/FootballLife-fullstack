@@ -136,7 +136,7 @@ class Profile extends Component {
             <div>
               {isAuthenticated().user &&
                 isAuthenticated().user.role === "admin" && (
-                  <div class="card mt-5">
+                  <div className="card mt-5">
                     <div className="card-body">
                       <h5 className="card-title">Admin</h5>
                       <p className="mb-2 text-danger">
@@ -148,8 +148,7 @@ class Profile extends Component {
                       >
                         Edit Profile
                       </Link>
-                      {/*<DeleteUser userId={user._id} />*/}
-                      <DeleteUser />
+                      <DeleteUser userId={user._id} />
                     </div>
                   </div>
                 )}
