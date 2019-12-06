@@ -62,6 +62,6 @@ app.listen(port, () => {
     console.log(`A Node Js API is listening on port: ${port}`);
 });
 
-// app.get('*', (req, res) => {
-//     res.sendFile(path.join(publicPath, 'index.html'));
-//  });
+app.get('*', (req, res) => {
+    res.sendFile(path.join(publicPath, 'index.html'));
+ });
