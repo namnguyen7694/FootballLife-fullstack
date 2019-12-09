@@ -22,7 +22,7 @@ class Posts extends Component {
         });
     };
 
-    componentDidMount() {
+    componentWillMount() {
         this.loadPosts(this.state.page);
     }
 

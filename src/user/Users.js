@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { list } from "./apiUser";
 import DefaultProfile from "../images/avatar.jpg";
 import { Link } from "react-router-dom";
+import { isAuthenticated } from "../auth";
+import DeleteUser from "./DeleteUser";
 
 class Users extends Component {
   constructor() {
@@ -40,6 +42,7 @@ class Users extends Component {
           >
             View Profile
           </Link>
+          {(window.location.pathname =='/admin') &&  <DeleteUser userId={user._id} />}
         </div>
       ))}
     </div>

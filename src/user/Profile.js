@@ -71,8 +71,8 @@ class Profile extends Component {
     const userId = this.props.match.params.userId;
     this.init(userId);
   }
-
-  componentWillReceiveProps(props) {
+// note
+  componentDidUpdate(props) {
     const userId = props.match.params.userId;
     this.init(userId);
   }
@@ -124,7 +124,6 @@ class Profile extends Component {
                 >
                   Edit Profile
                 </Link>
-                <DeleteUser userId={user._id} />
               </div>
             ) : (
               <FollowProfileButton
