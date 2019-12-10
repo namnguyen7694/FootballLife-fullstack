@@ -71,8 +71,8 @@ class Profile extends Component {
     const userId = this.props.match.params.userId;
     this.init(userId);
   }
-// note
-  componentDidUpdate(props) {
+
+  componentWillReceiveProps(props) {
     const userId = props.match.params.userId;
     this.init(userId);
   }
@@ -134,7 +134,8 @@ class Profile extends Component {
 
             <div>
               {isAuthenticated().user &&
-                isAuthenticated().user.role === "admin" && (
+                isAuthenticated().user.role === "admin" && 
+                isAuthenticated().user._id !== user._id ? (
                   <div className="card mt-5">
                     <div className="card-body">
                       <h5 className="card-title">Admin</h5>
@@ -150,7 +151,7 @@ class Profile extends Component {
                       <DeleteUser userId={user._id} />
                     </div>
                   </div>
-                )}
+                ) : ""}
             </div>
           </div>
         </div>

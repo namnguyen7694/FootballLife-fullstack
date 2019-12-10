@@ -23,3 +23,8 @@ ul.nav.nav-tabs {
 .nav-pills .nav-link, .nav-tabs .nav-link {
     font-size: 1rem;
 }
+button.btn.btn-raised.btn-danger.float-right.mr-1 {
+    margin-top: -2.5rem;
+    font-size: 0.8rem;
+    padding: 0.25rem;
+}
