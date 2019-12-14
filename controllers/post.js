@@ -50,7 +50,7 @@ exports.createPost = (req, res, next) => {
 // get all Post with pagination
 exports.getPosts = async (req, res) => {
     const currentPage = req.query.page || 1;
-    const perPage = 6;
+    const perPage = 5;
     let totalItems;
 
     const posts = await Post.find()
@@ -59,9 +59,7 @@ exports.getPosts = async (req, res) => {
             totalItems = count;
             return Post.find()
                 .skip((currentPage - 1) * perPage)
-                .populate('comments', 'text created')
                 .populate('comments.postedBy', '_id name')
-                .populate('likes', '_id name')
                 .populate('postedBy', '_id name')
                 .select('_id title body created postedBy likes comments')
                 .limit(perPage)

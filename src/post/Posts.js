@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { list } from "./apiPost";
-import Skeleton from "react-loading-skeleton";
 import SinglePost from "./SinglePost";
 
 class Posts extends Component {
@@ -12,28 +11,24 @@ class Posts extends Component {
     };
   }
 
-  loadPosts = page => {
-    list(page).then(data => {
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        this.setState({ posts: data });
-      }
-    });
+  loadPosts = async page => {
+    const data = await list(page)
+    this.setState({ posts: data });
   };
 
-  componentWillMount() {
-    this.loadPosts(this.state.page);
+  async componentDidMount() {
+    await this.loadPosts(this.state.page);
   }
 
-  loadMore = number => {
-    this.setState({ page: this.state.page + number });
-    this.loadPosts(this.state.page + number);
-  };
+  loadMore = async number => {
+    await this.setState({ page: this.state.page + number})
+    await this.loadPosts(this.state.page);
+    console.log(this.state.posts)}
 
-  loadLess = number => {
-    this.setState({ page: this.state.page - number });
-    this.loadPosts(this.state.page - number);
+  loadLess = async number => {
+    await this.setState({ page: this.state.page - number }) 
+    await this.loadPosts(this.state.page);
+    console.log(this.state.posts);
   };
 
   renderPosts = posts => {
@@ -43,8 +38,8 @@ class Posts extends Component {
           return (
             <div className="card col-md-12 mb-3" key={i}>
               <div className="card-body">
-              {/* Load all post and detail */}
-                <SinglePost postId={post._id} />  
+                {/* Load all post and detail */}
+                <SinglePost postId={post._id} />
               </div>
             </div>
           );
@@ -60,7 +55,7 @@ class Posts extends Component {
         <h2 className="mt-5 mb-5">
           {!posts.length ? "Loading Posts..." : "Recent Posts"}
         </h2>
-        {!posts.length ? <Skeleton height={5000} /> : this.renderPosts(posts)}
+        {this.renderPosts(posts)}
 
         {/* Next & Prev button */}
         {page > 1 ? (

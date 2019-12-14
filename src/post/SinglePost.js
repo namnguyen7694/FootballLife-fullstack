@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { singlePost, like, unlike } from "./apiPost";
+import { like, unlike, singlePost } from "./apiPost";
 import DefaultPost from "../images/mountains.jpg";
 import DefaultProfile from "../images/avatar.jpg";
 import { Link, Redirect } from "react-router-dom";
@@ -9,41 +9,39 @@ import DeletePost from "./DeletePost";
 import Skeleton from "react-loading-skeleton";
 
 class SinglePost extends Component {
-  state = {
-    post: "",
-    redirectToHome: false,
-    redirectToSignin: false,
-    like: false,
-    likes: 0,
-    comments: []
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      post: "",
+      redirectToHome: false,
+      redirectToSignin: false,
+      like: false,
+      likes: "",
+      comments: []
+    };
+  }
 
   checkLike = likes => {
     const userId = isAuthenticated() && isAuthenticated().user._id;
     let match = likes.indexOf(userId) !== -1;
     return match;
   };
-
-  componentDidMount = () => {
-    const postId = this.props.postId;
-    singlePost(postId).then(data => {
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        this.setState({
-          post: data,
-          likes: data.likes.length,
-          like: this.checkLike(data.likes),
-          comments: data.comments
-        });
-      }
-    });
-  };
+  async componentDidMount() {
+    const post = await singlePost(this.props.postId)
+    await this.setState({
+      post: post,
+      like: this.checkLike(post.likes),
+      likes: post.likes.length,
+      comments: post.comments
+    })
+    console.log(this.state.post);
+  }
 
   updateComments = comments => {
     this.setState({ comments });
   };
 
+  // call like or dislike API
   likeToggle = () => {
     if (!isAuthenticated()) {
       this.setState({ redirectToSignin: true });
@@ -76,6 +74,7 @@ class SinglePost extends Component {
       <div className="card-body">
         <div className="row">
           <div className="col-md-7">
+            
             {/* avatar & postername & time */}
             {!post ? (
               <Skeleton count={2} />
