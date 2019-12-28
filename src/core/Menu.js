@@ -58,7 +58,7 @@ const Menu = ({ history }) => (
         </React.Fragment>
       )}
 
-      {isAuthenticated() && isAuthenticated().user.role === "admin" && (
+      {isAuthenticated() && isAuthenticated().role === "admin" && (
         <li className="nav-item">
           <Link
             to={`/admin`}
@@ -84,11 +84,11 @@ const Menu = ({ history }) => (
 
           <li className="nav-item">
             <Link
-              to={`/user/${isAuthenticated().user._id}`}
-              style={isActive(history, `/user/${isAuthenticated().user._id}`)}
+              to={`/user/${isAuthenticated()._id}`}
+              style={isActive(history, `/user/${isAuthenticated()._id}`)}
               className="nav-link"
             >
-              {`${isAuthenticated().user.name}'s profile`}
+              {`${isAuthenticated().name}'s profile`}
             </Link>
           </li>
 

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { list } from "./apiPost";
 import SinglePost from "./SinglePost";
+import { isAuthenticated } from "../auth";
+import Loading from "./Loading";
 
 class Posts extends Component {
   constructor() {
@@ -12,8 +14,14 @@ class Posts extends Component {
   }
 
   loadPosts = async page => {
-    const data = await list(page)
+    const data = await list(page);
     this.setState({ posts: data });
+  };
+
+  checkLike = likes => {
+    const userId = isAuthenticated() && isAuthenticated()._id;
+    let match = likes.indexOf(userId) !== -1;
+    return match;
   };
 
   async componentDidMount() {
@@ -21,16 +29,18 @@ class Posts extends Component {
   }
 
   loadMore = async number => {
-    await this.setState({ page: this.state.page + number})
+    await this.setState({ page: this.state.page + number });
     await this.loadPosts(this.state.page);
-    console.log(this.state.posts)}
-
-  loadLess = async number => {
-    await this.setState({ page: this.state.page - number }) 
-    await this.loadPosts(this.state.page);
-    console.log(this.state.posts);
   };
 
+  loadLess = async number => {
+    await this.setState({ page: this.state.page - number });
+    await this.loadPosts(this.state.page);
+  };
+
+  listenChange = async () => {
+    await this.loadPosts(this.state.page);
+  };
   renderPosts = posts => {
     return (
       <div className="row">
@@ -39,7 +49,10 @@ class Posts extends Component {
             <div className="card col-md-12 mb-3" key={i}>
               <div className="card-body">
                 {/* Load all post and detail */}
-                <SinglePost postId={post._id} />
+                <SinglePost
+                  post={post}
+                  listenChange={() => this.listenChange()}
+                />
               </div>
             </div>
           );
@@ -55,7 +68,7 @@ class Posts extends Component {
         <h2 className="mt-5 mb-5">
           {!posts.length ? "Loading Posts..." : "Recent Posts"}
         </h2>
-        {this.renderPosts(posts)}
+        {!posts.length ? <Loading/> : (this.renderPosts(posts))}
 
         {/* Next & Prev button */}
         {page > 1 ? (
@@ -68,7 +81,7 @@ class Posts extends Component {
         ) : (
           ""
         )}
-
+        
         {posts.length ? (
           <button
             className="btn btn-raised btn-success mt-5 mb-5"

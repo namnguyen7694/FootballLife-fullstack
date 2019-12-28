@@ -70,7 +70,6 @@ class Signin extends Component {
           console.log(`data after signin: ${data}`);
           // authenticate
           authenticate(data, () => {
-            console.log(localStorage);
             this.setState({ redirectToReferer: true });
           });
         }

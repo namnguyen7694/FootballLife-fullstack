@@ -1,44 +1,27 @@
 import React, { Component } from "react";
-import { like, unlike, singlePost } from "./apiPost";
+import { like, unlike } from "./apiPost";
 import DefaultPost from "../images/mountains.jpg";
 import DefaultProfile from "../images/avatar.jpg";
 import { Link, Redirect } from "react-router-dom";
 import { isAuthenticated } from "../auth";
 import Comment from "./Comment";
 import DeletePost from "./DeletePost";
-import Skeleton from "react-loading-skeleton";
 
 class SinglePost extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      post: "",
+      post: this.props.post,
       redirectToHome: false,
       redirectToSignin: false,
-      like: false,
-      likes: "",
       comments: []
     };
   }
 
   checkLike = likes => {
-    const userId = isAuthenticated() && isAuthenticated().user._id;
+    const userId = isAuthenticated() && isAuthenticated()._id;
     let match = likes.indexOf(userId) !== -1;
     return match;
-  };
-  async componentDidMount() {
-    const post = await singlePost(this.props.postId)
-    await this.setState({
-      post: post,
-      like: this.checkLike(post.likes),
-      likes: post.likes.length,
-      comments: post.comments
-    })
-    console.log(this.state.post);
-  }
-
-  updateComments = comments => {
-    this.setState({ comments });
   };
 
   // call like or dislike API
@@ -47,8 +30,8 @@ class SinglePost extends Component {
       this.setState({ redirectToSignin: true });
       return false;
     }
-    let callApi = this.state.like ? unlike : like;
-    const userId = isAuthenticated().user._id;
+    let callApi = this.checkLike(this.state.post.likes) ? unlike : like;
+    const userId = isAuthenticated()._id;
     const postId = this.state.post._id;
     const token = isAuthenticated().token;
 
@@ -56,57 +39,55 @@ class SinglePost extends Component {
       if (data.error) {
         console.log(data.error);
       } else {
-        this.setState({
-          like: !this.state.like,
-          likes: data.likes.length
-        });
+        this.props.listenChange();
       }
     });
   };
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return {
+      post: nextProps.post
+    };
+  }
+
   renderPost = post => {
     const posterId = post.postedBy ? post.postedBy._id : "";
     const posterName = post.postedBy ? post.postedBy.name : " Unknown";
-    const { comments } = this.state;
-    const { like, likes } = this.state;
+    const comments = post.comments;
+    const like = this.checkLike(post.likes);
+    const likes = post.likes.length;
 
     return (
       <div className="card-body">
         <div className="row">
           <div className="col-md-7">
-            
             {/* avatar & postername & time */}
-            {!post ? (
-              <Skeleton count={2} />
-            ) : (
-              <>
-                <Link to={`/user/${posterId}`}>
-                  <img
-                    src={`${process.env.REACT_APP_API_URL}/user/photo/${posterId}`}
-                    alt={posterId}
-                    style={{
-                      borderRadius: "50%",
-                      border: "1px solid black"
-                    }}
-                    className="float-left mr-2"
-                    height="60px"
-                    width="60px"
-                    onError={i => (i.target.src = `${DefaultProfile}`)}
-                  />
-                </Link>
-                <Link
-                  to={`/user/${posterId}`}
-                  style={{
-                    fontSize: "30px"
-                  }}
-                >
-                  {posterName}{" "}
-                </Link>
-                <p className="font-italic">
-                  on {new Date(post.created).toDateString()}
-                </p>
-              </>
-            )}
+
+            <Link to={`/user/${posterId}`}>
+              <img
+                src={`${process.env.REACT_APP_API_URL}/user/photo/${posterId}`}
+                alt={posterId}
+                style={{
+                  borderRadius: "50%",
+                  border: "1px solid black"
+                }}
+                className="float-left mr-2"
+                height="60px"
+                width="60px"
+                onError={i => (i.target.src = `${DefaultProfile}`)}
+              />
+            </Link>
+            <Link
+              to={`/user/${posterId}`}
+              style={{
+                fontSize: "30px"
+              }}
+            >
+              {posterName}{" "}
+            </Link>
+            <p className="font-italic">
+              on {new Date(post.created).toDateString()}
+            </p>
           </div>
           <div className="col-md-5">
             {/* update, delete post (admin or owner) */}
@@ -127,26 +108,18 @@ class SinglePost extends Component {
         </div>
 
         {/* post title & image */}
-        {!post ? (
-          <Skeleton count={1} />
-        ) : (
-          <h5 className="display-3 mt-2 mb-2">{post.title}</h5>
-        )}
-        {!post ? (
-          <Skeleton height={700} />
-        ) : (
-          <img
-            src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
-            alt={post.title}
-            onError={i => (i.target.src = `${DefaultPost}`)}
-            className="img-thunbnail mb-3"
-            style={{
-              maxHeight: "700px",
-              width: "100%",
-              objectFit: "cover"
-            }}
-          />
-        )}
+        <h5 className="display-4 mb-2">{post.title}</h5>
+        <img
+          src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
+          alt={post.title}
+          onError={i => (i.target.src = `${DefaultPost}`)}
+          className="img-thunbnail mb-3"
+          style={{
+            maxHeight: "700px",
+            width: "100%",
+            objectFit: "cover"
+          }}
+        />
 
         {/* post like */}
         {like ? (
@@ -168,11 +141,12 @@ class SinglePost extends Component {
         )}
         {window.location.pathname !== "/admin" && (
           <>
-            <p className="card-text">{post.body}</p>
+            <h5 className="card-text">{post.body}</h5>
             <Comment
               postId={post._id}
               comments={comments.reverse()}
               updateComments={this.updateComments}
+              listenChange={() => this.props.listenChange()}
             />
           </>
         )}

@@ -20,7 +20,7 @@ class NewPost extends Component {
 
   componentDidMount() {
     this.postData = new FormData();
-    this.setState({ user: isAuthenticated().user });
+    this.setState({ user: isAuthenticated() });
   }
 
   isValid = () => {
@@ -53,7 +53,7 @@ class NewPost extends Component {
     this.setState({ loading: true });
 
     if (this.isValid()) {
-      const userId = isAuthenticated().user._id;
+      const userId = isAuthenticated()._id;
       const token = isAuthenticated().token;
 
       createPost(userId, token, this.postData).then(data => {

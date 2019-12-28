@@ -52,7 +52,7 @@ class Users extends Component {
                   >
                     Edit Profile
                   </Link>
-                  <DeleteUser userId={user._id} />
+                  <DeleteUser userId={user._id}/>
                 </>
               )}
             </div>

@@ -37,14 +37,15 @@ exports.signin = (req, res) => {
             const payload = {
                 _id : user._id,
                 email : user.email,
-                role : user.role
+                role : user.role,
+                name: user.name
             }
             const token= jwt.sign(payload, process.env.JWT_SECRET)  //{expiresIn: 1800}
         // })
         // .then(token => {
             // res.cookie('t', token, {expire: new Date() + 9999})
             const { _id, name, email, role } = user;
-            return res.status(200).json({ token, user: { _id, email, name, role } })
+            return res.status(200).json({ token })
         })
         .catch(err =>{
             if(!err.status) return res.status(500).json({error:err.message})

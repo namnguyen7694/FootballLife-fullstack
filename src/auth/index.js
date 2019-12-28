@@ -1,3 +1,5 @@
+import jwtDecode from 'jwt-decode';
+
 export const signup = user => {
     return fetch(`${process.env.REACT_APP_API_URL}/signup`, {
         method: 'POST',
@@ -62,7 +64,9 @@ export const isAuthenticated = () => {
     }
 
     if (localStorage.getItem('jwt')) {
-        return JSON.parse(localStorage.getItem('jwt'));
+        const token = JSON.parse(localStorage.getItem('jwt')).token;
+        const decoded = jwtDecode(localStorage.getItem('jwt'));
+        return {...decoded, token};
     } else {
         return false;
     }

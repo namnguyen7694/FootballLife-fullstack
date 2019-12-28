@@ -10,7 +10,7 @@ class Admin extends Component {
     };
 
     componentDidMount() {
-        if (isAuthenticated().user.role !== "admin") {
+        if (isAuthenticated().role !== "admin") {
             this.setState({ redirectToHome: true });
         }
     }

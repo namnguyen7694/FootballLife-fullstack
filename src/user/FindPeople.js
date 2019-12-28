@@ -15,7 +15,7 @@ class FindPeople extends Component {
     }
 
     componentDidMount() {
-        const userId = isAuthenticated().user._id;
+        const userId = isAuthenticated()._id;
         const token = isAuthenticated().token;
 
         findPeople(userId, token).then(data => {
@@ -28,7 +28,7 @@ class FindPeople extends Component {
     }
 
     clickFollow = (user, i) => {
-        const userId = isAuthenticated().user._id;
+        const userId = isAuthenticated()._id;
         const token = isAuthenticated().token;
 
         follow(userId, token, user._id).then(data => {

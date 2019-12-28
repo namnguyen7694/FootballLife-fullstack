@@ -35,7 +35,7 @@ class Comment extends Component {
     }
 
     if (this.isValid()) {
-      const userId = isAuthenticated().user._id;
+      const userId = isAuthenticated()._id;
       const token = isAuthenticated().token;
       const postId = this.props.postId;
 
@@ -45,14 +45,14 @@ class Comment extends Component {
         } else {
           this.setState({ text: "" });
           // dispatch fresh list of coments to parent (SinglePost)
-          this.props.updateComments(data.comments);
+          this.props.listenChange();
         }
       });
     }
   };
 
   deleteComment = comment => {
-    const userId = isAuthenticated().user._id;
+    const userId = isAuthenticated()._id;
     const token = isAuthenticated().token;
     const postId = this.props.postId;
 
@@ -60,7 +60,7 @@ class Comment extends Component {
       if (data.error) {
         console.log(data.error);
       } else {
-        this.props.updateComments(data.comments);
+        this.props.listenChange();
       }
     });
   };
@@ -80,7 +80,7 @@ class Comment extends Component {
 
     return (
       <div>
-        <h2 className="mt-2 mb-2">Leave a comment</h2>
+        <h4 className="mt-4 mb-2">Leave a comment</h4>
 
         <form onSubmit={this.addComment}>
           <div className="form-group">
@@ -131,8 +131,8 @@ class Comment extends Component {
                     </Link>
                     on {new Date(comment.created).toDateString()}
                     <span>
-                      {isAuthenticated().user &&
-                        isAuthenticated().user._id === comment.postedBy._id && (
+                      {isAuthenticated() &&
+                        isAuthenticated()._id === comment.postedBy._id && (
                           <>
                             <button
                               onClick={() => this.deleteConfirmed(comment)}

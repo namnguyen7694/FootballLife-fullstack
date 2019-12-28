@@ -13,7 +13,7 @@ class Profile extends Component {
     super();
     this.state = {
       user: { following: [], followers: [] },
-      redirectToSignin: false,
+      redirectNotFound: false,
       following: false,
       error: "",
       posts: []
@@ -25,13 +25,13 @@ class Profile extends Component {
     const jwt = isAuthenticated();
     const match = user.followers.find(follower => {
       // one id has many other ids (followers) and vice versa
-      return follower._id === jwt.user._id;
+      return follower._id === jwt._id;
     });
     return match;
   };
 
   clickFollowButton = callApi => {
-    const userId = isAuthenticated().user._id;
+    const userId = isAuthenticated()._id;
     const token = isAuthenticated().token;
 
     callApi(userId, token, this.state.user._id).then(data => {
@@ -47,7 +47,7 @@ class Profile extends Component {
     const token = isAuthenticated().token;
     read(userId, token).then(data => {
       if (data.error) {
-        this.setState({ redirectToSignin: true });
+        this.setState({ redirectNotFound: true });
       } else {
         let following = this.checkFollow(data);
         this.setState({ user: data, following });
@@ -78,8 +78,8 @@ class Profile extends Component {
   }
 
   render() {
-    const { redirectToSignin, user, posts } = this.state;
-    if (redirectToSignin) return <Redirect to="/signin" />;
+    const { redirectNotFound, user, posts } = this.state;
+    if (redirectNotFound) return <Redirect to="/userNotFound" />;
 
     const photoUrl = user._id
       ? `${process.env.REACT_APP_API_URL}/user/photo/${
@@ -108,8 +108,8 @@ class Profile extends Component {
               <p>{`Joined ${new Date(user.created).toDateString()}`}</p>
             </div>
 
-            {isAuthenticated().user &&
-            isAuthenticated().user._id === user._id ? (
+            {isAuthenticated() &&
+            isAuthenticated()._id === user._id ? (
               <div className="d-inline-block">
                 <Link
                   className="btn btn-raised btn-info mr-5"
@@ -133,9 +133,9 @@ class Profile extends Component {
             )}
 
             <div>
-              {isAuthenticated().user &&
-                isAuthenticated().user.role === "admin" && 
-                isAuthenticated().user._id !== user._id ? (
+              {isAuthenticated() &&
+                isAuthenticated().role === "admin" && 
+                isAuthenticated()._id !== user._id ? (
                   <div className="card mt-5">
                     <div className="card-body">
                       <h5 className="card-title">Admin</h5>

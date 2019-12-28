@@ -137,7 +137,7 @@ class EditPost extends Component {
     } = this.state;
 
     if (redirectToProfile) {
-      return <Redirect to={`/user/${isAuthenticated().user._id}`} />;
+      return <Redirect to={`/user/${isAuthenticated()._id}`} />;
     }
 
     return (
@@ -169,8 +169,8 @@ class EditPost extends Component {
           alt={title}
         />
 
-        {isAuthenticated().user._id === postedBy._id ||
-        isAuthenticated().user.role === "admin"
+        {isAuthenticated()._id === postedBy._id ||
+        isAuthenticated().role === "admin"
           ? this.editPostForm(title, body)
           : ""}
       </div>
